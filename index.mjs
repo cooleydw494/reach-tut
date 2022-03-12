@@ -1,6 +1,6 @@
 import { loadStdlib } from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
-const stdlib = loadStdlib();
+const stdlib = loadStdlib(process.env);
 
 const startingBalance = stdlib.parseCurrency(100);
 const accAlice = await stdlib.newTestAccount(startingBalance);
@@ -17,6 +17,7 @@ const ctcBob = accBob.contract(backend, ctcAlice.getInfo());
 const HAND = ['Rock', 'Paper', 'Scissors'];
 const OUTCOME = ['Bob wins', 'Draw', 'Alice wins'];
 const Player = (Who) => ({
+    ...stdlib.hasRandom, // <--- new!
     getHand: () => {
         const hand = Math.floor(Math.random() * 3);
         console.log(`${Who} played ${HAND[hand]}`);
@@ -35,7 +36,7 @@ await Promise.all([
     ctcBob.p.Bob({
         ...Player('Bob'),
         acceptWager: (amt) => {
-            console.log(`Bob accepts the wager of ${fmt(amt)}`);
+            console.log(`Bob accepts the wager of ${fmt(amt)}.`);
         },
     }),
 ]);
@@ -43,5 +44,5 @@ await Promise.all([
 const afterAlice = await getBalance(accAlice);
 const afterBob = await getBalance(accBob);
 
-console.log(`Alice went from ${beforeAlice} to ${afterAlice}`);
-console.log(`Bob went from ${beforeBob} to ${afterBob}`);
+console.log(`Alice went from ${beforeAlice} to ${afterAlice}.`);
+console.log(`Bob went from ${beforeBob} to ${afterBob}.`);
