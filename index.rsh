@@ -65,8 +65,8 @@ export const main = Reach.App(() => {
         outcome == A_WINS ? [2, 0] :
             outcome == B_WINS ? [0, 2] :
                 [1, 1];
-    transfer(forAlice * wager).toAlice(Alice);
-    transfer(forBob * wager).toBob(Bob);
+    transfer(forAlice * wager).to(Alice);
+    transfer(forBob * wager).to(Bob);
     commit();
 
     each([Alice, Bob], () => {
